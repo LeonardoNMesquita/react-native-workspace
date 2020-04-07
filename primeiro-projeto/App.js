@@ -1,51 +1,49 @@
-import React, {useState} from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import React,{useState} from 'react';
+import { StyleSheet, Text, View, TextInput, Button, ScrollView,FlatList} from 'react-native';
+import ContatoItem from './components/ContatoItem';
+import ContatoInput from './components/ContatoInput';
 
 export default function App() {
-	const [ OutputText, setOutputText] = useState('Aperte para Gerar os Numero');
-	return (
-			<View style={styles.container}>
-			<Text>{OutputText}</Text>
-			<Button title="Gerar Numeros" onPress={() => {setOutputText(sorteiaNumeros)}}/>
-				</View>
-	);
-}
+  const[id, setId]= useState(10);
+  const [contatos, setContatos] = useState ([]);
+  const[contadorContatos, setContadorContatos] = useState(0);
 
+ 
+  //para add oque foi digitado
+  const adicionarContato=(nome, numero)=>{
+    contato=(id, nome, numero);
+
+    setContatos((contatos)=>{
+      console.log(contatos);
+      setId(id+2);
+      setContadorContatos(contadorContatos+1);
+      return[...contatos,{key:contadorContatos.toString(),value:contato=(id),value2:
+      contato=(nome),value3:contato=(numero)}];
+    });
+  };
+  const removerContato = (keyASerRemovida)=>{
+    setContatos(contatos=>{
+      return contatos.filter((contato)=>{
+        contato.key !== keyASerRemovida
+      })
+    });
+  };
+  return (
+    <View style={styles.telaPrincipalView}>
+      <View style={{padding:12,backgroundColor:'#ccd9ff',borderColor:'#000',borderRadius:6}}><Text>Contatos</Text></View>
+      <ContatoInput onAdicionarContato={adicionarContato}/>
+      <FlatList
+      data={contatos}/*colecao de contatos*/
+      renderItem={/*mapeamento*/
+      contato => (/*dado um contato gera uma view*/
+        <ContatoItem id={contato.item.value} nome={contato.item.value2} numero={contato.item.value3} 
+        onDelete={removerContato}/>
+      )}/>
+    </View>
+  );
+}
 const styles = StyleSheet.create({
-	container:{ 
-		flex: 1,
-		backgroundColor: '#fff',
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
+  telaPrincipalView:{
+    padding:50
+  }
 });
-
-
-
-function sorteia() {
-	return Math.round(Math.random() * 100)
-}
-function sorteiaNumeros() {
-	let megaSena = []
-	let numero = 1
-	while(numero <= 6) {
-		let numeroAleatorio = sorteia()
-		let achou = false
-		if(numeroAleatorio !== 0 && numeroAleatorio <= 60) {
-			for(posicao = 0; posicao < megaSena.length; posicao++) {
-				if(megaSena[posicao] == numeroAleatorio) {
-					achou = true
-					break
-				}
-			}
-			if(achou == false) {
-				megaSena.push(numeroAleatorio)
-				numero++
-			}
-		}
-	}
-
-	alert("Os números da sorte são: " + megaSena)
-}
-
-
